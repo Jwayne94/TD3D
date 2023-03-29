@@ -1,58 +1,58 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Node : MonoBehaviour
-{
-    public Color hoverColor;
-    public Vector3 positionOffset;
+public class Node : MonoBehaviour {
 
-    private GameObject turret;
+	public Color hoverColor;
+	public Vector3 positionOffset;
 
+	private GameObject turret;
 
-    private Renderer rend;
-    private Color startColor;
+	private Renderer rend;
+	private Color startColor;
 
-    BuildManager buildManager;
+	BuildManager buildManager;
 
-    void Start()
-    {
-        rend = GetComponent<Renderer>();
-        startColor = rend.material.color; //переменной цвета присваиваем текущую текстуру
+	void Start ()
+	{
+		rend = GetComponent<Renderer>();
+		startColor = rend.material.color; //переменной цвета присваиваем текущую текстуру
 
         buildManager = BuildManager.instance;
     }
 
-    void OnMouseDown() //функци€ срабатывает при клике на коллайдер
+	void OnMouseDown () //функци€ срабатывает при клике на коллайдер
     {
-        if (EventSystem.current.IsPointerOverGameObject()) //использу€ пространство имен EventSystem не дает наводить мышь на клетку, если над ней элемент интерфейса
+		if (EventSystem.current.IsPointerOverGameObject()) //использу€ пространство имен EventSystem не дает наводить мышь на клетку, если над ней элемент интерфейса
             return;
 
-        if (buildManager.GetTurretToBuild() == null)
+		if (buildManager.GetTurretToBuild() == null)
+			return;
+
+		if (turret != null)
+		{
+			Debug.Log("Can't build there! - TODO: Display on screen.");
+			return;
+		}
+
+		GameObject turretToBuild = buildManager.GetTurretToBuild(); //ѕостройка турели
+        turret = (GameObject)Instantiate(turretToBuild, transform.position + positionOffset, transform.rotation);
+	}
+
+	void OnMouseEnter () //функци€ срабатывает при наведении курсора на коллайер
+    {
+		if (EventSystem.current.IsPointerOverGameObject()) //использу€ пространство имен EventSystem не дает наводить мышь на клетку, если над ней элемент интерфейса
             return;
 
-        if (turret != null)
-        {
-            Debug.Log("Can't build there! - TODO: Display on screen.");
-            return;
-        }
+		if (buildManager.GetTurretToBuild() == null)
+			return;
 
-        GameObject turretTobuild = buildManager.GetTurretToBuild();//ѕостройка туррели
-        turret = (GameObject)Instantiate(turretTobuild, transform.position + positionOffset, transform.rotation);
+		rend.material.color = hoverColor; //смена текстуры на заданную параметром
     }
 
-    void OnMouseEnter() //функци€ срабатывает при наведении курсора на коллайер
+	void OnMouseExit () //функци€ срабатывает, когда курсор выходит за пределы коллайдера
     {
-        if (EventSystem.current.IsPointerOverGameObject()) //использу€ пространство имен EventSystem не дает наводить мышь на клетку, если над ней элемент интерфейса
-            return;
-
-        if (buildManager.GetTurretToBuild() == null)
-            return;
-
-        rend.material.color = hoverColor; //смена текстуры на заданную параметром
+		rend.material.color = startColor; //смена текстуры на изначальную
     }
 
-    void OnMouseExit() //функци€ срабатывает, когда курсор выходит за пределы коллайдера
-    {
-        rend.material.color = startColor; //смена текстуры на изначальную
-    }
 }

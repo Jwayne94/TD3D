@@ -1,93 +1,89 @@
 using UnityEngine;
+using System.Collections;
 
 public class Turret : MonoBehaviour {
 
-    private Transform target;
+	private Transform target;
 
-    [Header("Attributes")]
-    
-    public float range = 15f;  //настройка радиуса обзора
+	[Header("Attributes")]
+
+	public float range = 15f; //настройка радиуса обзора
     public float fireRate = 1f; //Выстрелы в секунду
-    private float fireCountdown = 0;
+    private float fireCountdown = 0f;
 
-    [Header("Unity Setup Fields")]
+	[Header("Unity Setup Fields")]
 
-    public string enemyTag = "Enemy";
+	public string enemyTag = "Enemy";
 
-    public Transform partToRotate; //объявление вращаемой части модели
+	public Transform partToRotate; //объявление вращаемой части модели
     public float turnSpeed = 10f; //скорость поворота
 
     public GameObject bulletPrefab; //префаб снаряда
     public Transform firePoint; //место спауна снаряда
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        InvokeRepeating("UpdateTarget", 0f, 0.5f);
-    }
-
-    void UpdateTarget() //поиск цели
-    {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemyTag);
-        float shortestDistance = Mathf.Infinity; //наименьшее расстояние
+    // Use this for initialization
+    void Start () {
+		InvokeRepeating("UpdateTarget", 0f, 0.5f);
+	}
+	
+	void UpdateTarget ()
+	{
+		GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemyTag);
+		float shortestDistance = Mathf.Infinity; //наименьшее расстояние
         GameObject nearestEnemy = null;
-        foreach (GameObject enemy in enemies)
-        {
-            float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position); //возвращает расстояние до цели
+		foreach (GameObject enemy in enemies)
+		{
+			float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position); //возвращает расстояние до цели
             if (distanceToEnemy < shortestDistance)
-            {
-                shortestDistance = distanceToEnemy;
-                nearestEnemy = enemy;
-            }
+			{
+				shortestDistance = distanceToEnemy;
+				nearestEnemy = enemy;
+			}
+		}
+
+		if (nearestEnemy != null && shortestDistance <= range)
+		{
+			target = nearestEnemy.transform; //определение ближайшей цели?
+        } else
+		{
+			target = null; //потеря цели из поля зрения
         }
 
-        if (nearestEnemy != null && shortestDistance <= range)
-        {
-            target = nearestEnemy.transform; //определение ближайшей цели?
-        }
-        else
-        {
-            target = null; //потеря цели из поля зрения
-        }
-    }
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (target == null)
-            return;     //если не находит цель, ничего не делает
+	// Update is called once per frame
+	void Update () {
+		if (target == null)
+			return; //если не находит цель, ничего не делает
 
-        //Наведение на цель
+        //Target lock on
         Vector3 dir = target.position - transform.position; //направление в сторону цели по вектору
         Quaternion lookRotation = Quaternion.LookRotation(dir); //вращение к цели
         Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles; //определение угла вращения, в отличии от значения lookRotation.eulerAngels, настощая фунцкия обеспечит более плавное вращение
-        partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f); //вращение строго по оси y
+        partToRotate.rotation = Quaternion.Euler (0f, rotation.y, 0f); //вращение строго по оси y
 
         if (fireCountdown <= 0f)
-        {
-            Shoot();
-            fireCountdown = 1f / fireRate;
-        }
+		{
+			Shoot();
+			fireCountdown = 1f / fireRate;
+		}
 
-        fireCountdown -= Time.deltaTime; //каждую секунду fireCountdown будет умньшаться на 1
+		fireCountdown -= Time.deltaTime; //каждую секунду fireCountdown будет умньшаться на 1
 
     }
 
-    void Shoot()
-    {
-        GameObject bulletGo = (GameObject)Instantiate(bulletPrefab, firePoint.position, firePoint.rotation); //создание объекта
-        Bullet bullet = bulletGo.GetComponent<Bullet>(); //поиск компонента
+	void Shoot ()
+	{
+		GameObject bulletGO = (GameObject)Instantiate(bulletPrefab, firePoint.position, firePoint.rotation); //создание объекта
+        Bullet bullet = bulletGO.GetComponent<Bullet>(); //поиск компонента
 
-        if (bullet != null) //если существует снаряд, используется метод 
+        if (bullet != null) //если существует снаряд, используется метод
             bullet.Seek(target);
-        
-    }
+	}
 
-
-
-    void OnDrawGizmosSelected()            //отображение радиуса действия
+	void OnDrawGizmosSelected () //отображение радиуса действия
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, range);
-    }
+		Gizmos.color = Color.red;
+		Gizmos.DrawWireSphere(transform.position, range);
+	}
 }
