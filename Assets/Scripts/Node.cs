@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Node : MonoBehaviour
 {
@@ -11,26 +12,42 @@ public class Node : MonoBehaviour
     private Renderer rend;
     private Color startColor;
 
+    BuildManager buildManager;
+
     void Start()
     {
         rend = GetComponent<Renderer>();
         startColor = rend.material.color; //переменной цвета присваиваем текущую текстуру
+
+        buildManager = BuildManager.instance;
     }
 
     void OnMouseDown() //функция срабатывает при клике на коллайдер
     {
+        if (EventSystem.current.IsPointerOverGameObject()) //используя пространство имен EventSystem не дает наводить мышь на клетку, если над ней элемент интерфейса
+            return;
+
+        if (buildManager.GetTurretToBuild() == null)
+            return;
+
         if (turret != null)
         {
             Debug.Log("Can't build there! - TODO: Display on screen.");
             return;
         }
 
-        GameObject turretTobuild = BuildManager.instance.GetTurretToBuild();//Постройка туррели
+        GameObject turretTobuild = buildManager.GetTurretToBuild();//Постройка туррели
         turret = (GameObject)Instantiate(turretTobuild, transform.position + positionOffset, transform.rotation);
     }
 
     void OnMouseEnter() //функция срабатывает при наведении курсора на коллайер
     {
+        if (EventSystem.current.IsPointerOverGameObject()) //используя пространство имен EventSystem не дает наводить мышь на клетку, если над ней элемент интерфейса
+            return;
+
+        if (buildManager.GetTurretToBuild() == null)
+            return;
+
         rend.material.color = hoverColor; //смена текстуры на заданную параметром
     }
 
