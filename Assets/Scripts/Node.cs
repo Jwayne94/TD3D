@@ -6,7 +6,8 @@ public class Node : MonoBehaviour {
 	public Color hoverColor;
 	public Vector3 positionOffset;
 
-	private GameObject turret;
+    [Header("Optional")]
+	public GameObject turret;
 
 	private Renderer rend;
 	private Color startColor;
@@ -21,12 +22,17 @@ public class Node : MonoBehaviour {
         buildManager = BuildManager.instance;
     }
 
+    public Vector3 GetBuildPosition()
+    {
+        return transform.position + positionOffset;
+    }
+
 	void OnMouseDown () //функция срабатывает при клике на коллайдер
     {
 		if (EventSystem.current.IsPointerOverGameObject()) //используя пространство имен EventSystem не дает наводить мышь на клетку, если над ней элемент интерфейса
             return;
 
-		if (buildManager.GetTurretToBuild() == null)
+		if (!buildManager.CanBuild) //см BuildManager.cs
 			return;
 
 		if (turret != null)
@@ -35,17 +41,16 @@ public class Node : MonoBehaviour {
 			return;
 		}
 
-		GameObject turretToBuild = buildManager.GetTurretToBuild(); //Постройка турели
-        turret = (GameObject)Instantiate(turretToBuild, transform.position + positionOffset, transform.rotation);
-	}
+        buildManager.BuildTurretOn(this); //Постройка турели
+    }
 
 	void OnMouseEnter () //функция срабатывает при наведении курсора на коллайер
     {
 		if (EventSystem.current.IsPointerOverGameObject()) //используя пространство имен EventSystem не дает наводить мышь на клетку, если над ней элемент интерфейса
             return;
 
-		if (buildManager.GetTurretToBuild() == null)
-			return;
+		if (!buildManager.CanBuild) //см BuildManager.cs
+            return;
 
 		rend.material.color = hoverColor; //смена текстуры на заданную параметром
     }
