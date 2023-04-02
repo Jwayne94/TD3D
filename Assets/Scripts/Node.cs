@@ -4,7 +4,9 @@ using UnityEngine.EventSystems;
 public class Node : MonoBehaviour {
 
 	public Color hoverColor;
-	public Vector3 positionOffset;
+    public Color notEnoughMoneyColor;
+
+    public Vector3 positionOffset;
 
     [Header("Optional")]
 	public GameObject turret;
@@ -51,8 +53,13 @@ public class Node : MonoBehaviour {
 
 		if (!buildManager.CanBuild) //см BuildManager.cs
             return;
-
-		rend.material.color = hoverColor; //смена текстуры на заданную параметром
+        if (buildManager.HasMoney)
+        {
+            rend.material.color = hoverColor; //смена текстуры на заданную параметром
+        } else
+        {
+            rend.material.color = notEnoughMoneyColor;
+        }
     }
 
 	void OnMouseExit () //функция срабатывает, когда курсор выходит за пределы коллайдера
