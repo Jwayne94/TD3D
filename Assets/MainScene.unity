@@ -1117,8 +1117,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16d264522323c7d4fa2bd32ad61cc81d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  standardTurretPrefab: {fileID: 174700, guid: 64f2ae8c83ee6bb49a47a2d3f43d307e, type: 3}
-  missleLauncherPrefab: {fileID: 3925423973720732072, guid: 73e4f5204b1bdb748a0bef889c7f1a29, type: 3}
   buildEffect: {fileID: 2980438894161643027, guid: 041c0ad465a4e464ab867ec4b188fe8e, type: 3}
 --- !u!114 &196616390
 MonoBehaviour:
@@ -13273,6 +13271,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1649567681}
     m_Modifications:
+    - target: {fileID: 391904365034369723, guid: edc014414a5b74c4d810cfce64cb8f0e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectLaserBeamer
+      objectReference: {fileID: 0}
     - target: {fileID: 2490662096664750718, guid: edc014414a5b74c4d810cfce64cb8f0e, type: 3}
       propertyPath: m_Text
       value: $40
@@ -13434,6 +13436,30 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8032191050150692569, guid: edc014414a5b74c4d810cfce64cb8f0e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810335149648279059, guid: edc014414a5b74c4d810cfce64cb8f0e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810335149648279059, guid: edc014414a5b74c4d810cfce64cb8f0e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810335149648279059, guid: edc014414a5b74c4d810cfce64cb8f0e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810335149648279059, guid: edc014414a5b74c4d810cfce64cb8f0e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810335149648279059, guid: edc014414a5b74c4d810cfce64cb8f0e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8810335149648279059, guid: edc014414a5b74c4d810cfce64cb8f0e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}

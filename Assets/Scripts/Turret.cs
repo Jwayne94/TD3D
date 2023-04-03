@@ -5,20 +5,26 @@ public class Turret : MonoBehaviour {
 
 	private Transform target;
 
-	[Header("Attributes")]
+	[Header("General")]
 
 	public float range = 15f; //настройка радиуса обзора
+
+    [Header("Use Bullets (default)")]
+    public GameObject bulletPrefab; //префаб снар€да
     public float fireRate = 1f; //¬ыстрелы в секунду
     private float fireCountdown = 0f;
 
-	[Header("Unity Setup Fields")]
+    [Header("Use Laser")]
+    public bool useLaser = false;
+    public LineRenderer lineRenderer;
+
+    [Header("Unity Setup Fields")]
 
 	public string enemyTag = "Enemy";
 
 	public Transform partToRotate; //объ€вление вращаемой части модели
     public float turnSpeed = 10f; //скорость поворота
 
-    public GameObject bulletPrefab; //префаб снар€да
     public Transform firePoint; //место спауна снар€да
 
     // Use this for initialization
@@ -54,25 +60,58 @@ public class Turret : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (target == null)
-			return; //если не находит цель, ничего не делает
+        {
+            if (useLaser)
+            {
+                if (lineRenderer.enabled)
+                    lineRenderer.enabled = false; //условие прекращает отображени€ лазера, если он включен
+            }
 
+            return; //если не находит цель, ничего не делает
+        }
+
+
+        LockOnTarget();
+
+        if (useLaser)
+        {
+            Laser(); 
+        }
+        else
+        {
+            if (fireCountdown <= 0f)
+            {
+                Shoot();
+                fireCountdown = 1f / fireRate;
+            }
+
+        }
+
+
+        fireCountdown -= Time.deltaTime; //каждую секунду fireCountdown будет умньшатьс€ на 1
+
+    }
+
+    void LockOnTarget()
+    {
         //Target lock on
         Vector3 dir = target.position - transform.position; //направление в сторону цели по вектору
         Quaternion lookRotation = Quaternion.LookRotation(dir); //вращение к цели
         Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles; //определение угла вращени€, в отличии от значени€ lookRotation.eulerAngels, настоща€ фунцки€ обеспечит более плавное вращение
-        partToRotate.rotation = Quaternion.Euler (0f, rotation.y, 0f); //вращение строго по оси y
-
-        if (fireCountdown <= 0f)
-		{
-			Shoot();
-			fireCountdown = 1f / fireRate;
-		}
-
-		fireCountdown -= Time.deltaTime; //каждую секунду fireCountdown будет умньшатьс€ на 1
+        partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f); //вращение строго по оси y
 
     }
 
-	void Shoot ()
+    void Laser() //вектор направлени€ луча
+    {
+        if (!lineRenderer.enabled)
+            lineRenderer.enabled = true; //включает лазер
+
+        lineRenderer.SetPosition(0, firePoint.position); //начальна€ точка
+        lineRenderer.SetPosition(1, target.position);   //конечна€ точка
+    }
+
+    void Shoot ()
 	{
 		GameObject bulletGO = (GameObject)Instantiate(bulletPrefab, firePoint.position, firePoint.rotation); //создание объекта
         Bullet bullet = bulletGO.GetComponent<Bullet>(); //поиск компонента
