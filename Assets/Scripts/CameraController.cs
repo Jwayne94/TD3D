@@ -6,10 +6,10 @@ public class CameraController : MonoBehaviour {
 
 	public float panSpeed = 30f;
 	public float panBorderThickness = 10f; //будет определ€ть рассто€ние от границы экрана
-    public float maxX = 75f;
-    public float minX = 5f;
+    public float maxX = 72f;
+    public float minX = 0f;
     public float maxZ = -10f;
-    public float minZ = -80f;
+    public float minZ = -85f;
 
     public float scrollSpeed = 5f;
 	public float minY = 10f;

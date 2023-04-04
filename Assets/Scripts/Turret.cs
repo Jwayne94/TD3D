@@ -4,6 +4,7 @@ using System.Collections;
 public class Turret : MonoBehaviour {
 
 	private Transform target;
+    private Enemy targetEnemy;
 
 	[Header("General")]
 
@@ -16,6 +17,10 @@ public class Turret : MonoBehaviour {
 
     [Header("Use Laser")]
     public bool useLaser = false;
+
+    public int damageOverTime = 151;
+    public float slowPct = .5f; //процент замедления цели
+
     public LineRenderer lineRenderer;
     public ParticleSystem impactEffect;
     public Light impactLight;
@@ -52,6 +57,7 @@ public class Turret : MonoBehaviour {
 		if (nearestEnemy != null && shortestDistance <= range)
 		{
 			target = nearestEnemy.transform; //определение ближайшей цели?
+            targetEnemy = nearestEnemy.GetComponent<Enemy>();
         } else
 		{
 			target = null; //потеря цели из поля зрения
@@ -110,8 +116,12 @@ public class Turret : MonoBehaviour {
 
     void Laser() //вектор направления луча
     {
+        targetEnemy.TakeDamage(damageOverTime * Time.deltaTime); //нанесение урона каждую секунду
+        targetEnemy.Slow(slowPct);
+
         if (!lineRenderer.enabled)
         {
+
             lineRenderer.enabled = true; //включает лазер
             impactEffect.Play(); //эффект не будет исчезать сразу в отличии от enabled
             impactLight.enabled = true;
