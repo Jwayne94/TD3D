@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,5 +30,10 @@ public class GameManager : MonoBehaviour
         GameIsOver = true;
         gameOverUI.SetActive(true);
 
+    }
+
+    public static explicit operator GameObject(GameManager v)
+    {
+        throw new NotImplementedException();
     }
 }

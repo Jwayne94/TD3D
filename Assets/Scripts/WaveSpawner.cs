@@ -9,7 +9,7 @@ public class WaveSpawner : MonoBehaviour {
 	public Transform spawnPoint;
 
 	public float timeBetweenWaves = 5f; //Время между волнами
-    private float countdown = 2f; //Время перед первой волной
+    private float countdown = 10f; //Время перед первой волной
 
     public Text waveCountdownText;
 
