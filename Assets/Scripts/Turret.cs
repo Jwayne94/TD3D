@@ -17,6 +17,8 @@ public class Turret : MonoBehaviour {
     [Header("Use Laser")]
     public bool useLaser = false;
     public LineRenderer lineRenderer;
+    public ParticleSystem impactEffect;
+    public Light impactLight;
 
     [Header("Unity Setup Fields")]
 
@@ -64,7 +66,11 @@ public class Turret : MonoBehaviour {
             if (useLaser)
             {
                 if (lineRenderer.enabled)
+                {
                     lineRenderer.enabled = false; //условие прекращает отображения лазера, если он включен
+                    impactEffect.Stop();
+                    impactLight.enabled = false;
+                }
             }
 
             return; //если не находит цель, ничего не делает
@@ -105,10 +111,21 @@ public class Turret : MonoBehaviour {
     void Laser() //вектор направления луча
     {
         if (!lineRenderer.enabled)
+        {
             lineRenderer.enabled = true; //включает лазер
+            impactEffect.Play(); //эффект не будет исчезать сразу в отличии от enabled
+            impactLight.enabled = true;
+        }
 
         lineRenderer.SetPosition(0, firePoint.position); //начальная точка
         lineRenderer.SetPosition(1, target.position);   //конечная точка
+
+        Vector3 dir = firePoint.position - target.position; //вычисляет расположение эффекта попадания
+
+        impactEffect.transform.position = target.position + dir.normalized; //смещает эффект, чтобы он не был внутри цели
+
+        impactEffect.transform.rotation = Quaternion.LookRotation(dir); //определяет направление эффекта попадания
+
     }
 
     void Shoot ()
