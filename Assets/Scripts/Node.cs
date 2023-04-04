@@ -34,14 +34,14 @@ public class Node : MonoBehaviour {
 		if (EventSystem.current.IsPointerOverGameObject()) //используя пространство имен EventSystem не дает наводить мышь на клетку, если над ней элемент интерфейса
             return;
 
-		if (!buildManager.CanBuild) //см BuildManager.cs
-			return;
-
 		if (turret != null)
 		{
-			Debug.Log("Can't build there! - TODO: Display on screen.");
+            buildManager.SelectNode(this);
 			return;
 		}
+
+        if (!buildManager.CanBuild) //см BuildManager.cs
+            return;
 
         buildManager.BuildTurretOn(this); //Постройка турели
     }

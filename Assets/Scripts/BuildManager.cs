@@ -17,6 +17,9 @@ public class BuildManager : MonoBehaviour {
     public GameObject buildEffect;
 
 	private TurretBlueprint turretToBuild;
+    private Node selectedNode;
+
+    public NodeUI nodeUI;
 
     public bool CanBuild { get { return turretToBuild != null; } } //Функция проверяет на наличие значения turretToBuld, возвращает значение истины 
     public bool HasMoney { get { return PlayerStats.Money >= turretToBuild.cost; } } //Функция проверяет на наличие денег, возвращает значение истины 
@@ -40,9 +43,31 @@ public class BuildManager : MonoBehaviour {
         Debug.Log("Turret build! Money left: " + PlayerStats.Money);
     }
 
+    public void SelectNode(Node node) //метод выбирает туррель, которая установлена на платформе
+    {
+        if (selectedNode == node)
+        {
+            DeselectNode();
+            return;
+        }
+
+        selectedNode = node;
+        turretToBuild = null;
+
+        nodeUI.SetTarget(node);
+    }
+
+    public void DeselectNode() //функция помогает закрыть элемент интерфейса
+    {
+        selectedNode = null;
+        nodeUI.Hide();
+    }
+
     public void SelectTurretToBuild (TurretBlueprint turret) //метод выбирает устанавливаемую туррель
     {
 		turretToBuild = turret;
+
+        DeselectNode();
 	}
 
 }
