@@ -8,7 +8,7 @@ public class Turret : MonoBehaviour {
 
 	[Header("General")]
 
-	public float range = 15f; //настройка радиуса обзора
+	public float range = 15f; //настройка радиуса обзора 
 
     [Header("Use Bullets (default)")]
     public GameObject bulletPrefab; //префаб снаряда

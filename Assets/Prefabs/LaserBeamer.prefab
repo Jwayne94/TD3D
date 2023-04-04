@@ -9889,11 +9889,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89e58e17ccca86642a73d908b186c94d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 20
+  range: 15
   bulletPrefab: {fileID: 0}
   fireRate: 1
   useLaser: 1
   damageOverTime: 151
+  slowPct: 0.5
   lineRenderer: {fileID: 5285302493478815821}
   impactEffect: {fileID: 3288936681027281705}
   impactLight: {fileID: 3679282823276579310}

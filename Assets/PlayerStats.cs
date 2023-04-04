@@ -9,6 +9,8 @@ public class PlayerStats : MonoBehaviour
     public static int Lives;
     public int startLives = 20;
 
+    public static int Rounds;
+
     public static int Income;
     public int startIncome = 100; // доход игрока за 10 секунд
     public static float Timer = 10.0f; // таймер для отслеживания прошедшего времени
@@ -18,6 +20,8 @@ public class PlayerStats : MonoBehaviour
     {
         Money = startMoney;
         Lives = startLives;
+
+        Rounds = 0;
 
         Income = startIncome;
     }

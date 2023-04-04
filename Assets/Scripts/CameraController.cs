@@ -18,6 +18,12 @@ public class CameraController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        if (GameManager.GameIsOver) //блокирует камеру при окончании игры
+        {
+            this.enabled = false;
+            return;
+        }
+
 		if (Input.GetKeyDown(KeyCode.Escape)) //нажатие Esc блокирует управление камерой
             doMovement = !doMovement;
 
