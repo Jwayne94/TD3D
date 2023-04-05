@@ -115,7 +115,8 @@ MonoBehaviour:
   speed: 10
   health: 200
   worth: 10
-  deathEffect: {fileID: 5452339378557289065, guid: f9c885449ccf7c34bbec364503337a75, type: 3}
+  deathEffect: {fileID: 5452339378557289065, guid: e533bcf6bf437a1469c486110a01d638, type: 3}
+  RewardTextCanvas: {fileID: 6917268524151407516, guid: 2ca8d77b929a3154794b83ae007947fc, type: 3}
 --- !u!114 &-8221624491682485501
 MonoBehaviour:
   m_ObjectHideFlags: 0

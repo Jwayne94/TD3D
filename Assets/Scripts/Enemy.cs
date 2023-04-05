@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour {
@@ -12,6 +13,8 @@ public class Enemy : MonoBehaviour {
     public int worth = 10;
 
     public GameObject deathEffect; //будет вызываться анимация смерти в функции Die()
+
+    public GameObject RewardTextCanvas;
 
     void Start()
     {
@@ -40,10 +43,35 @@ public class Enemy : MonoBehaviour {
 
     void Die()
     {
-
+        ShowRewardText();
         Destroy(gameObject);
     }
 
+    public void ShowRewardText()
+    {
+        // Создаем копию объекта Canvas RewardText и сохраняем его в переменной
+        GameObject rewardTextCanvas = (GameObject)Instantiate(RewardTextCanvas, transform.position, Quaternion.identity);
 
+        // Получаем объект TextMeshPro из копии Canvas
+        TextMeshProUGUI rewardText = rewardTextCanvas.GetComponentInChildren<TextMeshProUGUI>();
+
+        // Задаем текст для объекта TextMeshPro
+        rewardText.text = "+" + worth.ToString() + "$";
+
+        // Запускаем анимацию появления объекта Canvas
+        Animator animator = rewardTextCanvas.GetComponent<Animator>();
+        if (animator != null)
+        {
+            animator.SetTrigger("Show");
+
+            // Уничтожаем объект Canvas после окончания анимации
+            Destroy(rewardTextCanvas, animator.GetCurrentAnimatorStateInfo(0).length);
+        }
+        else
+        {
+            // Уничтожаем объект Canvas через 1 секунду после его появления
+            Destroy(rewardTextCanvas, 1f);
+        }
+    }
 
 }
