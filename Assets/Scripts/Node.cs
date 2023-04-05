@@ -98,6 +98,17 @@ public class Node : MonoBehaviour {
 
     }
 
+    public void SellTurret()
+    {
+        PlayerStats.Money += turretBlueprint.GetSellAmount();
+
+        GameObject effect = (GameObject)Instantiate(buildManager.sellEffect, GetBuildPosition(), Quaternion.identity); //эффект при создании
+        Destroy(effect, 5f);                                                                                                                //эффект продажи
+
+        Destroy(turret);
+        turretBlueprint = null;
+    }
+
     void OnMouseEnter () //функци€ срабатывает при наведении курсора на коллайер
     {
 		if (EventSystem.current.IsPointerOverGameObject()) //использу€ пространство имен EventSystem не дает наводить мышь на клетку, если над ней элемент интерфейса

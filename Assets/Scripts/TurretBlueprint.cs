@@ -8,4 +8,9 @@ public class TurretBlueprint
 
     public GameObject upgradedPrefab;
     public int upgradeCost;
+
+    public int GetSellAmount () //функция будет вычислять стоимость продажи построенной турели 
+    {
+        return cost / 4;
+    }
 }

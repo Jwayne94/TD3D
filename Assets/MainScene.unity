@@ -1562,6 +1562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildEffect: {fileID: 2980438894161643027, guid: 041c0ad465a4e464ab867ec4b188fe8e, type: 3}
+  sellEffect: {fileID: 2980438894161643027, guid: 5b32364352afc9f47ad16c2a10ef5bd1, type: 3}
   nodeUI: {fileID: 684176524}
 --- !u!114 &196616390
 MonoBehaviour:
@@ -1603,7 +1604,7 @@ GameObject:
   - component: {fileID: 210618130}
   - component: {fileID: 210618129}
   m_Layer: 0
-  m_Name: Cost
+  m_Name: Amount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4543,6 +4544,8 @@ MonoBehaviour:
   ui: {fileID: 160296718}
   upgradeCost: {fileID: 1240182421}
   upgradeButton: {fileID: 259068893}
+  sellAmount: {fileID: 210618129}
+  sellButton: {fileID: 933642885}
 --- !u!1001 &687134307
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6363,7 +6366,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 684176524}
         m_TargetAssemblyTypeName: NodeUI, Assembly-CSharp
-        m_MethodName: Upgrade
+        m_MethodName: Sell
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -16061,6 +16064,10 @@ PrefabInstance:
       value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 7810330162723389521, guid: edc014414a5b74c4d810cfce64cb8f0e, type: 3}
+      propertyPath: laserBeamer.upgradedPrefab
+      value: 
+      objectReference: {fileID: 6800768855056682342, guid: c20c7216dcce32f4bafe721483568891, type: 3}
+    - target: {fileID: 7810330162723389521, guid: edc014414a5b74c4d810cfce64cb8f0e, type: 3}
       propertyPath: missleLauncher.upgradeCost
       value: 40
       objectReference: {fileID: 0}
@@ -16071,7 +16078,7 @@ PrefabInstance:
     - target: {fileID: 7810330162723389521, guid: edc014414a5b74c4d810cfce64cb8f0e, type: 3}
       propertyPath: missleLauncher.upgradedPrefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 3925423973720732072, guid: 6c3ac625d06dafe439562d36012c17c6, type: 3}
     - target: {fileID: 7810330162723389521, guid: edc014414a5b74c4d810cfce64cb8f0e, type: 3}
       propertyPath: standartTurret.upgradedPrefab
       value: 

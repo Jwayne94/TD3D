@@ -8,6 +8,9 @@ public class NodeUI : MonoBehaviour
     public Text upgradeCost;
     public Button upgradeButton;
 
+    public Text sellAmount;
+    public Button sellButton;
+
     private Node target;
 
     public void SetTarget(Node _target) //функция выбирает нод
@@ -26,6 +29,8 @@ public class NodeUI : MonoBehaviour
             upgradeButton.interactable = false;
         }
 
+        sellAmount.text = "$" + target.turretBlueprint.GetSellAmount(); //метод, в котором вычисляется стоимость продажи
+
         ui.SetActive(true);     //будет включать отображение элемента интерфейса
     }
 
@@ -37,6 +42,12 @@ public class NodeUI : MonoBehaviour
     public void Upgrade()
     {
         target.UpgradeTurret();
+        BuildManager.instance.DeselectNode();
+    }
+
+    public void Sell()
+    {
+        target.SellTurret();
         BuildManager.instance.DeselectNode();
     }
 
