@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
 
@@ -8,7 +9,8 @@ public class Enemy : MonoBehaviour {
     [HideInInspector] //убрать лишние поля
 	public float speed;
 
-    public float health = 200;
+    public float startHealth = 200;
+    private float health;
 
     public int worth = 10;
 
@@ -16,14 +18,20 @@ public class Enemy : MonoBehaviour {
 
     public GameObject RewardTextCanvas;
 
+    [Header("Unity Stuff")]
+    public Image healthbar;
+
     void Start()
     {
         speed = startSpeed;
+        health = startHealth;
     }
 
     public void TakeDamage(float amount)
     {
         health -= amount;
+
+        healthbar.fillAmount = health / startHealth;
 
         if (health <= 0)
         {
