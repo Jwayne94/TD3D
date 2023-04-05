@@ -26,6 +26,10 @@ public class PlayerStats : MonoBehaviour
         Income = startIncome;
     }
 
+    void OnEnable()
+    {
+        Timer = 10.0f; // сбрасываем таймер при каждом включении объекта
+    }
 
     void Update()
     {
