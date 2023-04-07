@@ -35,11 +35,6 @@ public class Enemy : MonoBehaviour {
 
         if (health <= 0)
         {
-            PlayerStats.Money += worth;
-
-            GameObject effect = (GameObject)Instantiate(deathEffect, transform.position, Quaternion.identity);
-            Destroy(effect, 5f);
-
             Die();
         }
     }
@@ -51,6 +46,13 @@ public class Enemy : MonoBehaviour {
 
     void Die()
     {
+        PlayerStats.Money += worth;
+
+        GameObject effect = (GameObject)Instantiate(deathEffect, transform.position, Quaternion.identity);
+        Destroy(effect, 5f);
+
+        WaveSpawner.EnemiesAlive--;
+
         ShowRewardText();
         Destroy(gameObject);
     }

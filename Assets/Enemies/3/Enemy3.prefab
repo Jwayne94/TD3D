@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 11483098}
   - component: {fileID: -8221624491682485501}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Enemy3
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6845e78e14320a641b442b6df92c566e, type: 2}
+  - {fileID: 2100000, guid: c5ca417793783634b89e3a04007d50d1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -114,9 +114,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startSpeed: 7.5
   speed: 10
-  startHealth: 200
-  worth: 10
-  deathEffect: {fileID: 5452339378557289065, guid: e533bcf6bf437a1469c486110a01d638, type: 3}
+  startHealth: 800
+  worth: 40
+  deathEffect: {fileID: 5452339378557289065, guid: 8a2b3cc139b441d4d8faf732a9775456, type: 3}
   RewardTextCanvas: {fileID: 6917268524151407516, guid: 2ca8d77b929a3154794b83ae007947fc, type: 3}
   healthbar: {fileID: 2097598660179669191}
 --- !u!114 &-8221624491682485501

@@ -5,6 +5,10 @@ public class PauseMenu : MonoBehaviour
 {
     public GameObject ui;
 
+    public SceneFader sceneFader; //класс объекта затухания 
+
+    public string menuSceneName = "MainMenu";
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
@@ -29,12 +33,13 @@ public class PauseMenu : MonoBehaviour
     public void Retry()
     {
         Toggle(); //будет отключать меню паузы
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //перезапускает сцену
+        sceneFader.FadeTo(SceneManager.GetActiveScene().name); //перезапускает сцену
     }
 
     public void Menu()
     {
-        Debug.Log("Go to menu.");
+        Toggle();
+        sceneFader.FadeTo(menuSceneName);
     }
 
 }
