@@ -4,6 +4,9 @@ public class CameraController : MonoBehaviour {
 
 	public float panSpeed = 30f;
 	public float panBorderThickness = 10f; //будет определять расстояние от границы экрана
+
+
+
     public float maxX = 72f;
     public float minX = 0f;
     public float maxZ = -10f;
@@ -15,6 +18,8 @@ public class CameraController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+        Vector3 pos = transform.position; //переменная отвечает за перемещение по всем осям //переменная позиции масштаба
+
 
         if (GameManager.GameIsOver) //блокирует камеру при окончании игры
         {
@@ -22,26 +27,26 @@ public class CameraController : MonoBehaviour {
             return;
         }
 
-        if (Input.GetKey("w") && transform.position.z < maxZ || Input.mousePosition.y >= Screen.height - panBorderThickness && transform.position.z < maxZ)
+        if (Input.GetKey("w") || Input.mousePosition.y >= Screen.height - panBorderThickness)
         {
-            transform.Translate(Vector3.forward * panSpeed * Time.deltaTime, Space.World);
+            pos.z += panSpeed * Time.deltaTime;
         }
-        if (Input.GetKey("s") && transform.position.z > minZ || Input.mousePosition.y <= panBorderThickness && transform.position.z > minZ)
+        if (Input.GetKey("s") || Input.mousePosition.y <= panBorderThickness)
         {
-            transform.Translate(Vector3.back * panSpeed * Time.deltaTime, Space.World);
+            pos.z -= panSpeed * Time.deltaTime;
         }
-        if (Input.GetKey("d") && transform.position.x < maxX || Input.mousePosition.x >= Screen.width - panBorderThickness && transform.position.x < maxX)
+        if (Input.GetKey("d") || Input.mousePosition.x >= Screen.width - panBorderThickness)
         {
-            transform.Translate(Vector3.right * panSpeed * Time.deltaTime, Space.World);
+            pos.x += panSpeed * Time.deltaTime;
         }
-        if (Input.GetKey("a") && transform.position.x > minX || Input.mousePosition.x <= panBorderThickness && transform.position.x > minX)
+        if (Input.GetKey("a") || Input.mousePosition.x <= panBorderThickness)
         {
-            transform.Translate(Vector3.left * panSpeed * Time.deltaTime, Space.World);
+            pos.x -= panSpeed * Time.deltaTime;
         }
+        pos.x = Mathf.Clamp(pos.x, minX, maxX);
+        pos.z = Mathf.Clamp(pos.z, minZ, maxZ);
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-
-		Vector3 pos = transform.position; //переменная позиции масштаба
 
         pos.y -= scroll * 1000 * scrollSpeed * Time.deltaTime;
 		pos.y = Mathf.Clamp(pos.y, minY, maxY);
