@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,6 +8,12 @@ public class Node : MonoBehaviour {
     public Color notEnoughMoneyColor;
 
     public Vector3 positionOffset;
+
+    private Vector3 initialPosition;
+    private bool isMoving = false;
+    private Coroutine moveCoroutine; // Ссылка на запущенную корутину
+
+    GameObject builder;
 
     [HideInInspector]
 	public GameObject turret;
@@ -26,8 +33,11 @@ public class Node : MonoBehaviour {
 		startColor = rend.material.color; //переменной цвета присваиваем текущую текстуру
 
         buildManager = BuildManager.instance;
-    }
 
+        builder = GameObject.Find("Builder");
+        initialPosition = builder.transform.position; // Сохраняем исходную позицию Builder
+    }
+        
     public Vector3 GetBuildPosition()
     {
         return transform.position + positionOffset;
@@ -35,7 +45,7 @@ public class Node : MonoBehaviour {
 
 	void OnMouseDown () //функция срабатывает при клике на коллайдер
     {
-		if (EventSystem.current.IsPointerOverGameObject()) //используя пространство имен EventSystem не дает наводить мышь на клетку, если над ней элемент интерфейса
+        if (EventSystem.current.IsPointerOverGameObject()) //используя пространство имен EventSystem не дает наводить мышь на клетку, если над ней элемент интерфейса
             return;
 
 		if (turret != null)
@@ -47,7 +57,23 @@ public class Node : MonoBehaviour {
         if (!buildManager.CanBuild) //см BuildManager.cs
             return;
 
-        BuildTurret(buildManager.GetTurretToBuild()); //Постройка турели
+        if (isMoving)
+        {
+            StopCoroutine(moveCoroutine); // Останавливаем текущую корутину перемещения
+            isMoving = false; // Сбрасываем флаг состояния перемещения
+        }
+
+
+        Vector3 targetPosition = GetBuildPosition();// Перемещаем объект Builder в целевую позицию
+        moveCoroutine = StartCoroutine(MoveBuilderToTargetPosition(targetPosition)); //используем StartCoroutine для вызова функции с корутином
+
+        float delayTime = .5f;
+        Invoke("BuildTurretAfterDelay", delayTime); //Постройка турели
+        isMoving = true;
+    }
+    void BuildTurretAfterDelay()
+    {
+        BuildTurret(buildManager.GetTurretToBuild());
     }
 
     void BuildTurret(TurretBlueprint blueprint)  //функция постройки турели
@@ -70,7 +96,43 @@ public class Node : MonoBehaviour {
 
         Debug.Log("Turret build!");
     }
+    IEnumerator MoveBuilderToTargetPosition(Vector3 targetPosition)
+    {
+        float time = .5f; // Время перемещения
+        float elapsedTime = 0f; // Прошедшее время
 
+        Vector3 startPosition = builder.transform.position; // Начальная позиция
+        float initialY = builder.transform.position.y; // Значение Y на начало перемещения
+
+        while (elapsedTime < time)
+        {
+            Vector3 newPosition = new Vector3(Mathf.Lerp(startPosition.x, targetPosition.x, elapsedTime / time),
+                                             initialY, // Используем начальное значение Y
+                                             Mathf.Lerp(startPosition.z, targetPosition.z, elapsedTime / time));
+            builder.transform.position = newPosition;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        builder.transform.position = targetPosition; // Устанавливаем точную конечную позицию
+
+        // Возвращаем Builder на исходную позицию
+        elapsedTime = 0f; // Обнуляем прошедшее время
+        Vector3 returnPosition = builder.transform.position; // Текущая позиция Builder
+
+        while (elapsedTime < time)
+        {
+            Vector3 newPosition = new Vector3(Mathf.Lerp(returnPosition.x, initialPosition.x, elapsedTime / time),
+                                             initialY, // Используем начальное значение Y
+                                             Mathf.Lerp(returnPosition.z, initialPosition.z, elapsedTime / time));
+            builder.transform.position = newPosition;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        builder.transform.position = initialPosition; // Устанавливаем точную исходную позицию Builder
+        isMoving = false;
+    }
     public void UpgradeTurret() //Улучшение турели
     {
         if (PlayerStats.Money < turretBlueprint.upgradeCost)
