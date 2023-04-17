@@ -11,7 +11,7 @@ public class Node : MonoBehaviour {
 
     private Vector3 initialPosition;
     private bool isMoving = false;
-    private Coroutine moveCoroutine; // Ссылка на запущенную корутину
+    private Coroutine moveBulder; // Ссылка на запущенную корутину
 
     GameObject builder;
 
@@ -19,6 +19,13 @@ public class Node : MonoBehaviour {
 	public GameObject turret;
     [HideInInspector]
     public TurretBlueprint turretBlueprint;
+    [HideInInspector]
+    private int currentUpgradeLevel = 0;
+    // Публичное свойство для доступа к текущему уровню улучшения
+    public int CurrentUpgradeLevel
+    {
+        get { return currentUpgradeLevel; }
+    }
     [HideInInspector]
     public bool isUpgraded = false;
 
@@ -59,13 +66,13 @@ public class Node : MonoBehaviour {
 
         if (isMoving)
         {
-            StopCoroutine(moveCoroutine); // Останавливаем текущую корутину перемещения
+            StopCoroutine(moveBulder); // Останавливаем текущую корутину перемещения
             isMoving = false; // Сбрасываем флаг состояния перемещения
         }
 
 
         Vector3 targetPosition = GetBuildPosition();// Перемещаем объект Builder в целевую позицию
-        moveCoroutine = StartCoroutine(MoveBuilderToTargetPosition(targetPosition)); //используем StartCoroutine для вызова функции с корутином
+        moveBulder = StartCoroutine(MoveBuilderToTargetPosition(targetPosition)); //используем StartCoroutine для вызова функции с корутином
 
         float delayTime = .5f;
         Invoke("BuildTurretAfterDelay", delayTime); //Постройка турели
@@ -133,31 +140,33 @@ public class Node : MonoBehaviour {
         builder.transform.position = initialPosition; // Устанавливаем точную исходную позицию Builder
         isMoving = false;
     }
-    public void UpgradeTurret() //Улучшение турели
+    public void UpgradeTurret()
     {
-        if (PlayerStats.Money < turretBlueprint.upgradeCost)
+        if (PlayerStats.Money < turretBlueprint.upgradeCost[currentUpgradeLevel])
         {
             Debug.Log("Not enough money to upgrade that!");
             return;
         }
 
-        PlayerStats.Money -= turretBlueprint.upgradeCost;
+        PlayerStats.Money -= turretBlueprint.upgradeCost[currentUpgradeLevel];
 
-
-        //Избавиться от старой турели
+        // Избавиться от старой турели
         Destroy(turret);
 
-        //Построить новую турель
-        GameObject _turret = (GameObject)Instantiate(turretBlueprint.upgradedPrefab, GetBuildPosition(), Quaternion.identity); //установка префаба новой турели
+        // Построить новую турель
+        GameObject _turret = (GameObject)Instantiate(turretBlueprint.upgradedPrefab[currentUpgradeLevel], GetBuildPosition(), Quaternion.identity);
         turret = _turret;
 
-        GameObject effect = (GameObject)Instantiate(buildManager.buildEffect, GetBuildPosition(), Quaternion.identity); //эффект при создании
+        GameObject effect = (GameObject)Instantiate(buildManager.buildEffect, GetBuildPosition(), Quaternion.identity);
         Destroy(effect, 5f);
 
-        isUpgraded = true;
+        currentUpgradeLevel++; // Увеличить текущий уровень улучшения
+        if (currentUpgradeLevel >= turretBlueprint.upgradedPrefab.Length)
+        {
+            isUpgraded = true; // Установить флаг, что башня достигла максимального уровня улучшения
+        }
 
         Debug.Log("Turret upgraded!");
-
     }
 
     public void SellTurret()
@@ -169,6 +178,7 @@ public class Node : MonoBehaviour {
 
         Destroy(turret);
         turretBlueprint = null;
+        currentUpgradeLevel = 0;
     }
 
     void OnMouseEnter () //функция срабатывает при наведении курсора на коллайер

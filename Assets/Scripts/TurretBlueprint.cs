@@ -6,8 +6,8 @@ public class TurretBlueprint
     public GameObject prefab;
     public int cost;
 
-    public GameObject upgradedPrefab;
-    public int upgradeCost;
+    public GameObject[] upgradedPrefab; // Массив префабов улучшенных башен
+    public int[] upgradeCost; // Массив стоимостей улучшения башен
 
     public int GetSellAmount () //функция будет вычислять стоимость продажи построенной турели 
     {
