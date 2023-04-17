@@ -179,6 +179,7 @@ public class Node : MonoBehaviour {
         Destroy(turret);
         turretBlueprint = null;
         currentUpgradeLevel = 0;
+        isUpgraded = false;
     }
 
     void OnMouseEnter () //функция срабатывает при наведении курсора на коллайер
